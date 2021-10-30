@@ -8,6 +8,14 @@ The service that we’re going to build is a simple bank. It will provide APIs f
 
 ## Setup local development
 
+## Download
+
+clone the repository:
+
+```
+git clone git@github.com:sakhaei-wd/banker.git
+```
+
 ### Install tools
 
 - [Docker desktop](https://www.docker.com/products/docker-desktop)
