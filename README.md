@@ -6,7 +6,7 @@ The service that we’re going to build is a simple bank. It will provide APIs f
 2. Record all balance changes to each of the account. So every time some money is added to or subtracted from the account, an account entry record will be created.
 3. Perform a money transfer between 2 accounts. This should happen within a transaction, so that either both accounts’ balance are updated successfully or none of them are.
 
-## Setup local development
+
 
 ## Download
 
@@ -15,6 +15,8 @@ clone the repository:
 ```
 git clone git@github.com:sakhaei-wd/banker.git
 ```
+
+## Setup local development
 
 ### Install tools
 
