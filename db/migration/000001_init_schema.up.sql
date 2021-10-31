@@ -1,4 +1,4 @@
--- holds user'a account information
+-- holds user's account information
 CREATE TABLE "accounts" (
   "id" bigserial PRIMARY KEY,
   "owner" varchar NOT NULL,

@@ -12,20 +12,12 @@ VALUES
 
 -- name: ListTransfer :many
 SELECT * FROM transfers
-Order by  Id
-LIMIT $1
-OFFSET $2;
+WHERE from_account_id = $1 OR
+    to_account_id = $2
+Order by  id   
+LIMIT $3
+OFFSET $4;
 
 -- name: GetTransfer :one
 select * from transfers
 where id = $1;
-
--- name: DeleteTransfer :exec
-delete from transfers
-where id = $1;
-
--- name: UpdateTransfer :one
-update transfers
-set amount = $1
-where id = $2
-RETURNING *;

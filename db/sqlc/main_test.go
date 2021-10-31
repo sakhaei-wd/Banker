@@ -15,7 +15,7 @@ const (
 )
 
 var testQueries *Queries
-
+var testDB *sql.DB
 
 
 

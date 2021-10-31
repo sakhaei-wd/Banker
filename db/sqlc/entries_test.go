@@ -1,8 +1,7 @@
 package db
 
 import (
-	"context"
-	"database/sql"
+	"context"	
 	_ "github.com/lib/pq"
 	"github.com/sakhaei-wd/banker/util"
 	"github.com/stretchr/testify/require"
@@ -47,6 +46,7 @@ func TestListEntries(t *testing.T) {
 
 	for _, entry := range listEntries {
 		require.NotEmpty(t, entry)
+		require.Equal(t, arg.AccountID, entry.AccountID)
 	}
 }
 
