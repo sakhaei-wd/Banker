@@ -1,18 +1,15 @@
 package db
 
 import (
-		"database/sql"
+	"database/sql"
 	"log"
 	"os"
 	"testing"
-	_ "github.com/lib/pq"	
+
+	_ "github.com/lib/pq"
+	"github.com/sakhaei-wd/banker/util"
 )
 
-
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://postgres:password@localhost:5432/postgres?sslmode=disable"	
-)
 
 var testQueries *Queries
 var testDB *sql.DB
@@ -20,7 +17,11 @@ var testDB *sql.DB
 
 
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	
+	//../.. mean go to the parent folder.
+	config, err := util.LoadConfig("../..")
+	
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}

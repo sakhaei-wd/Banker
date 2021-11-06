@@ -7,19 +7,24 @@ import (
 
 //This Server will serves all HTTP requests for our banking service
 type Server struct {
-	store  *db.Store   //It will allow us to interact with the database when processing API requests from clients.
+	store  db.Store   //It will allow us to interact with the database when processing API requests from clients.
 	router *gin.Engine //This router will help us send each API request to the correct handler for processing.
 }
 
 //This function will create a new Server instance, and setup all HTTP API routes for our service on that server.
-func NewServer(store *db.Store) *Server {
+func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default() //we create a new router by  calling gin.Default()
 
-	// TODO: add routes to router
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccount)
+
+	router.POST("/entries", server.createEntry)
+	router.GET("/entries/:id", server.getEntry)
+	router.GET("/entries", server.listEntry)
+
+
 	
 	server.router = router
 	return server
