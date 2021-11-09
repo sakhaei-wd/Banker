@@ -9,14 +9,13 @@ import (
 // Store provides all functions to execute SQL queries and transactions
 type Store interface {
 	Querier
-	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)	
+	TransferTx(ctx context.Context, arg TransferTxParams) (TransferTxResult, error)
 }
 
 type SQLStore struct {
 	*Queries
 	db *sql.DB
 }
-
 
 // TransferTxParams contains the input parameters of the transfer transaction
 type TransferTxParams struct {
@@ -36,10 +35,10 @@ type TransferTxResult struct {
 
 // NewStore creates a new store
 func NewStore(db *sql.DB) Store {
-    return &SQLStore{
-        db:      db,
-        Queries: New(db),
-    }
+	return &SQLStore{
+		db:      db,
+		Queries: New(db),
+	}
 }
 
 // ExecTx executes a function within a database transaction
@@ -60,7 +59,6 @@ func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) erro
 
 	return tx.Commit()
 }
-
 
 // TransferTx performs a money transfer from one account to the other.
 // It creates the transfer, add account entries, and update accounts' balance within a database transaction
@@ -96,15 +94,31 @@ func (store *SQLStore) TransferTx(ctx context.Context, arg TransferTxParams) (Tr
 		if err != nil {
 			return err
 		}
+		if arg.FromAccountID < arg.ToAccountID {
+			result.FromAccount, result.ToAccount, err = addMoney(ctx, q, arg.FromAccountID, -arg.Amount, arg.ToAccountID, arg.Amount)
+		} else {
+			result.ToAccount, result.FromAccount, err = addMoney(ctx, q, arg.ToAccountID, arg.Amount, arg.FromAccountID, -arg.Amount)
+		}
 
-		//TODO : we’re done with the account entries creation. 
-		//The last step to update account balance will be more complicated because it involves 
-		//locking and preventing potential deadlock.
-
-
-
-		return nil
+		return err
 	})
 
 	return result, err
+}
+
+func addMoney(ctx context.Context, q *Queries, accountID1 int64, amount1 int64, accountID2 int64,
+	amount2 int64) (account1 Account, account2 Account, err error) {
+	account1, err = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+		ID:     accountID1,
+		Amount: amount1,
+	})
+	if err != nil {
+		return
+	}
+
+	account2, err = q.AddAccountBalance(ctx, AddAccountBalanceParams{
+		ID:     accountID2,
+		Amount: amount2,
+	})
+	return
 }

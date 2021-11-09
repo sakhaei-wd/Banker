@@ -10,7 +10,7 @@ import (
 
 type createAccountRequest struct {
 	Owner    string `json:"owner" binding:"required"`
-	Currency string `json:"currency" binding:"required,oneof=USD EUR"` //we can use the oneof condition to check only between USD and EUR
+	Currency string `json:"currency" binding:"required,currency"`  //use currency custom tag instead of : oneof=USD EUR"` which we can use the oneof condition to check only between USD and EUR
 }
 
 type getAccountRequest struct {

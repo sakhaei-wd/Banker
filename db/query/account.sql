@@ -1,3 +1,5 @@
+
+
 -- name: CreateAccount :one
 INSERT INTO accounts (
   owner,
@@ -29,3 +31,10 @@ RETURNING *;
 DELETE FROM accounts
 WHERE id = $1;
 
+
+
+-- name: AddAccountBalance :one
+UPDATE accounts
+SET balance = balance + sqlc.arg(amount)
+WHERE id = sqlc.arg(id)
+RETURNING *;
