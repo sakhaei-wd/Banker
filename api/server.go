@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	db "github.com/sakhaei-wd/banker/db/sqlc"
 	"github.com/gin-gonic/gin/binding"
-    "github.com/go-playground/validator/v10"
+	"github.com/go-playground/validator/v10"
+	db "github.com/sakhaei-wd/banker/db/sqlc"
 )
 
 //This Server will serves all HTTP requests for our banking service
@@ -21,10 +21,9 @@ func NewServer(store db.Store) *Server {
 	//get the current validator engine that Gin is using (binding is a sub-package of Gin)
 	//we have to convert the output to a validator.Validate object pointer. If it is ok then we can call v.RegisterValidation() to register our custom validate function.
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-        v.RegisterValidation("currency", validCurrency)
-		//now we have custom currency tag 
-    }
-
+		v.RegisterValidation("currency", validCurrency)
+		//now we have custom currency tag
+	}
 
 	router.POST("/accounts", server.createAccount)
 	router.GET("/accounts/:id", server.getAccount)
@@ -33,8 +32,10 @@ func NewServer(store db.Store) *Server {
 	router.POST("/entries", server.createEntry)
 	router.GET("/entries/:id", server.getEntry)
 	router.GET("/entries", server.listEntry)
-	
+
 	router.POST("/transfers", server.createTransfer)
+
+	router.POST("/user", server.createUser)
 
 	server.router = router
 	return server
