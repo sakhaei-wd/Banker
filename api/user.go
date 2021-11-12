@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 	"time"
@@ -24,6 +25,10 @@ type createUserResponse struct {
 	Fullname          string    `json:"full_name"`
 	PasswordChangedAt time.Time `json:"password_changed_at" `
 	CreatedAt         time.Time `json:"created_at"`
+}
+
+type getUserRequest struct {
+	UserName string `uri:"username" binding:"required"`
 }
 
 func (server *Server) createUser(ctx *gin.Context) {
@@ -72,3 +77,34 @@ func (server *Server) createUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, userResponse)
 }
+
+func (server *Server) getUser(ctx *gin.Context) {
+	var req getUserRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	user, err := server.store.GetUser(ctx, req.UserName)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	userResponse := createUserResponse{
+		Username:          user.Username,
+		Email:             user.Email,
+		Fullname:          user.FullName,
+		PasswordChangedAt: user.PasswordChangedAt,
+		CreatedAt:         user.CreatedAt,
+	}
+
+	ctx.JSON(http.StatusOK, userResponse)
+}
+
+
