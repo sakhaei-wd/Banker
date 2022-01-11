@@ -1,3 +1,4 @@
+//package api provides all api related to this project
 package api
 
 import (
