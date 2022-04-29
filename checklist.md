@@ -4,3 +4,21 @@ you. The easiest and recommended way to do this is using the [oauth2][]
 library, but you can always use any other library that provides an
 `http.Client`. If you have an OAuth2 access token (for example, a [personal
 API token][]), you can use it with the oauth2 library using:
+
+
+```go
+import "golang.org/x/oauth2"
+
+func main() {
+	ctx := context.Background()
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: "... your access token ..."},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+
+	client := github.NewClient(tc)
+
+	// list all repositories for the authenticated user
+	repos, _, err := client.Repositories.List(ctx, "", nil)
+}
+```
