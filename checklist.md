@@ -1,1 +1,6 @@
-
+The go-github library does not directly handle authentication. Instead, when
+creating a new client, pass an `http.Client` that can handle authentication for
+you. The easiest and recommended way to do this is using the [oauth2][]
+library, but you can always use any other library that provides an
+`http.Client`. If you have an OAuth2 access token (for example, a [personal
+API token][]), you can use it with the oauth2 library using:
