@@ -22,3 +22,12 @@ func main() {
 	repos, _, err := client.Repositories.List(ctx, "", nil)
 }
 ```
+For complete usage of go-github, see the full [package docs][].
+
+[GitHub API v3]: https://docs.github.com/en/rest
+[oauth2]: https://github.com/golang/oauth2
+[oauth2 docs]: https://godoc.org/golang.org/x/oauth2
+[personal API token]: https://github.com/blog/1509-personal-api-tokens
+[package docs]: https://pkg.go.dev/github.com/google/go-github/v43/github
+[GraphQL API v4]: https://developer.github.com/v4/
+[shurcooL/githubv4]: https://github.com/shurcooL/githubv4
